@@ -10,11 +10,14 @@ class C2DMProfile(models.Model):
     registrationId = models.CharField(max_length = 140)
     collapseKey = models.CharField(max_length = 50)
 
-    def send_message(self, message):
+    def send_message(self, **kwargs):
         values = {
             'registration_id': self.registrationId,
             'collapse_key': self.collapseKey,
         }
+
+        for key,value in kwargs.items():
+            values['data.%s' % key] = value
 
         headers = {
             'Authorization': 'GoogleLogin auth=%s' % AUTH_TOKEN,
@@ -26,8 +29,6 @@ class C2DMProfile(models.Model):
 
             # Make the request
             response = urllib2.urlopen(request)
-
-            return response.read()
         except Exception, error:
             print error
 
