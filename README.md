@@ -15,6 +15,8 @@ Where YOUR_PUSH_ACCOUNT_AUTH_TOKEN is the ClientLogin token for your push accoun
 
 And then add django_c2dm to your INSTALLED_APPS.
 
+## Finding your ClientLogin token
+
 You can retrieve the ClientLogin token for your push account via cURL:
 
     curl -X POST https://www.google.com/accounts/ClientLogin -d Email=ACCOUNT -d Passwd=PASSWORD -d accountType=HOSTED_OR_GOOGLE -d service=ac2dm
