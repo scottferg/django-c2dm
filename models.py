@@ -6,14 +6,30 @@ import urllib, urllib2
 C2DM_URL = 'https://android.apis.google.com/c2dm/send'
 
 class C2DMProfile(models.Model):
-    deviceId = models.CharField(max_length = 64)
-    registrationId = models.CharField(max_length = 140)
-    collapseKey = models.CharField(max_length = 50)
+    '''
+    Profile of a c2dm-enabled Android device
+
+    device_id - Unique ID for the device.  Simply used as a default method to specify a device.
+    registration_id - Result of calling registration intent on the device. Subject to change.
+    collapse_key - Required arbitrary collapse_key string.
+    last_messaged - When did we last send a push to the device
+    failed_push - Have we had a failure when pushing to this device? Flag it here.
+    '''
+    device_id = models.CharField(max_length = 64)
+    registration_id = models.CharField(max_length = 140)
+    collapse_key = models.CharField(max_length = 50)
+    last_messaged = models.DateTimeField(blank = True, default = datetime.datetime.now)
+    failed_push = models.BooleanField(default = False)
 
     def send_message(self, **kwargs):
+        '''
+        Sends a message to the device.  
+        
+        data.keyX fields are populated via kwargs.
+        '''
         values = {
-            'registration_id': self.registrationId,
-            'collapse_key': self.collapseKey,
+            'registration_id': self.registration_id,
+            'collapse_key': self.collapse_key,
         }
 
         for key,value in kwargs.items():
@@ -34,3 +50,12 @@ class C2DMProfile(models.Model):
 
     def __unicode__(self):
         return '%s' % self.deviceId
+
+def send_multiple_messages(self, device_list, **kwargs):
+    '''
+    Same as send_message but sends to a list of devices.
+
+    data.keyX fields are populated via kwargs.
+    '''
+    for device in device_list:
+        device.send_message(kwargs)
