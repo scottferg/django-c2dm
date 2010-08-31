@@ -15,4 +15,5 @@ You can retrieve the ClientLogin token for your push account via cURL:
     curl -X POST https://www.google.com/accounts/ClientLogin -d Email=ACCOUNT -d Passwd=PASSWORD -d accountType=HOSTED_OR_GOOGLE -d service=ac2dm
 
 Just replace ACCOUNT and PASSWORD with the relevant information.  
+
 Copy everything in the response following Auth= to get your AUTH_TOKEN value.
