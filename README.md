@@ -1,7 +1,7 @@
 django-c2dm
 =====
 
-django-c2dm is a Django module for sending a push notification to an Android device 
+django-c2dm is a Django module for sending push messages to an Android device 
 using Cloud 2 Device Messaging.  It provides a model to store the necessary information
 required to send a message through C2DM as well as several helper functions.
 
