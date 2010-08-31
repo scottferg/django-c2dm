@@ -1,9 +1,9 @@
 from django.db import models
+from django.conf import settings
 
 import urllib, urllib2
 
 C2DM_URL = 'https://android.apis.google.com/c2dm/send'
-AUTH_TOKEN = 'PASTE_AUTH_TOKEN_HERE'
 
 class C2DMProfile(models.Model):
     deviceId = models.CharField(max_length = 64)
@@ -20,7 +20,7 @@ class C2DMProfile(models.Model):
             values['data.%s' % key] = value
 
         headers = {
-            'Authorization': 'GoogleLogin auth=%s' % AUTH_TOKEN,
+            'Authorization': 'GoogleLogin auth=%s' % settings.AUTH_TOKEN,
         }
 
         try:
