@@ -27,6 +27,7 @@ from django.db import models
 from django.conf import settings
 
 import urllib, urllib2
+import datetime
 
 C2DM_URL = 'https://android.apis.google.com/c2dm/send'
 
