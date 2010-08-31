@@ -27,6 +27,7 @@ from django.db import models
 from django.conf import settings
 
 import urllib, urllib2
+from urllib2 import URLError
 import datetime
 
 C2DM_URL = 'https://android.apis.google.com/c2dm/send'
@@ -47,16 +48,23 @@ class C2DMProfile(models.Model):
     last_messaged = models.DateTimeField(blank = True, default = datetime.datetime.now)
     failed_push = models.BooleanField(default = False)
 
-    def send_message(self, **kwargs):
+    def send_message(self, delay_while_idle = False, **kwargs):
         '''
         Sends a message to the device.  
         
+        delay_while_idle - If included, indicates that the message should not be sent immediately if the device is idle. The server will wait for the device to become active, and then only the last message for each collapse_key value will be sent.
         data.keyX fields are populated via kwargs.
         '''
+        if self.failed_push:
+            return
+
         values = {
             'registration_id': self.registration_id,
             'collapse_key': self.collapse_key,
         }
+
+        if delay_while_idle:
+            values['delay_while_idle'] = ''
 
         for key,value in kwargs.items():
             values['data.%s' % key] = value
@@ -71,11 +79,22 @@ class C2DMProfile(models.Model):
 
             # Make the request
             response = urllib2.urlopen(request)
+
+            result = response.read().split('=')
+
+            if 'Error' in result:
+                if result[1] == 'InvalidRegistration' or result[1] == 'NotRegistered':
+                    self.failed_push = True
+                    self.save()
+
+                raise Exception(result[1])
+        except URLError:
+            return false
         except Exception, error:
-            print error
+            return false 
 
     def __unicode__(self):
-        return '%s' % self.deviceId
+        return '%s' % self.device_id
 
 def send_multiple_messages(device_list, **kwargs):
     '''
