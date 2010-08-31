@@ -25,6 +25,7 @@
 
 from django.db import models
 from django.conf import settings
+from django.db.models.signals import post_save
 
 import urllib, urllib2
 from urllib2 import URLError
@@ -32,7 +33,7 @@ import datetime
 
 C2DM_URL = 'https://android.apis.google.com/c2dm/send'
 
-class C2DMProfile(models.Model):
+class AndroidDevice(models.Model):
     '''
     Profile of a c2dm-enabled Android device
 
@@ -109,5 +110,11 @@ def filter_failed_devices():
     '''
     Removes any devices with failed registration_id's from the database
     '''
-    for device in C2DMProfile.objects.filter(failed_push = True):
+    for device in AndroidDevice.objects.filter(failed_push = True):
         device.delete()
+
+def registration_completed_callback(sender, **kwargs):
+    profile = kwargs['instance']
+    profile.send_message(message = 'Registration successful')
+
+post_save.connect(registration_completed_callback, sender = AndroidDevice)
