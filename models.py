@@ -76,7 +76,7 @@ class C2DMProfile(models.Model):
     def __unicode__(self):
         return '%s' % self.deviceId
 
-def send_multiple_messages(self, device_list, **kwargs):
+def send_multiple_messages(device_list, **kwargs):
     '''
     Same as send_message but sends to a list of devices.
 
@@ -84,3 +84,10 @@ def send_multiple_messages(self, device_list, **kwargs):
     '''
     for device in device_list:
         device.send_message(kwargs)
+
+def filter_failed_devices():
+    '''
+    Removes any devices with failed registration_id's from the database
+    '''
+    for device in C2DMProfile.objects.filter(failed_push = True):
+        device.delete()
