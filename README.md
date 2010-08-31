@@ -9,7 +9,7 @@ required to send a message through C2DM as well as several helper functions.
 
 Using django-c2dm is easy.  Add the following line to your settings.py file: 
 
-    AUTH_TOKEN = 'YOUR_PUSH_ACCOUNT_AUTH_TOKEN'
+    C2DM_AUTH_TOKEN = 'YOUR_PUSH_ACCOUNT_AUTH_TOKEN'
 
 Where YOUR_PUSH_ACCOUNT_AUTH_TOKEN is the ClientLogin token for your push account.
 
