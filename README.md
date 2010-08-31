@@ -20,6 +20,8 @@ Copy everything in the response following Auth= to get your AUTH_TOKEN value.
 
 ## Usage
 
-To send a message to a device call send_message() on the model.  send_message() takes kwargs as the only parameter.
+To send a message to a device call send_message() on the model.  send_message() only needs kwargs as a parameter.
 Use this to populate the data.X fields in your message.  These fields will be provided as extras on the intent
 that the device receives.
+
+You can also set the delay_while_idle parameter to True to enable this feature.
