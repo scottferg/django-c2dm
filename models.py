@@ -71,7 +71,7 @@ class AndroidDevice(models.Model):
             values['data.%s' % key] = value
 
         headers = {
-            'Authorization': 'GoogleLogin auth=%s' % settings.AUTH_TOKEN,
+            'Authorization': 'GoogleLogin auth=%s' % settings.C2DM_AUTH_TOKEN,
         }
 
         try:
