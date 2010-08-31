@@ -118,5 +118,5 @@ def registration_completed_callback(sender, **kwargs):
     Returns a push response when the device has successfully registered.
     '''
     profile = kwargs['instance']
-    profile.send_message(message = 'Registration successful')
+    profile.send_message(message = 'Registration successful', result = '1')
 post_save.connect(registration_completed_callback, sender = AndroidDevice)
